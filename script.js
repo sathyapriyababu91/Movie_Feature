@@ -24,63 +24,43 @@ const movies = [
 
 const container = document.getElementById("movie-container");
 
-function displayMovies(data){
-    const movieArray = Array.isArray(data) ? data : [data];
+function displayMovies(data) {
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-film fa-3x text-secondary mb-3"></i>
+                <h4 class="text-secondary">No Movie found!</h4>
+                <button class="btn btn-warning mt-3" onclick="showall()">View All</button>
+            </div>`;
+        return;
+    }
 
-    container.innerHTML = movieArray.map(movie =>
-        ` <div class="col-6 col-md-4 col-lg-3 mb-4 movie-col">
+    container.innerHTML = data.map(movie => `
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
             <div class="card h-100 shadow-lg border-0 bg-dark text-white movie-card">
-                <div class="card-img-wrapper position-relative">
-                    <img src="${movie.img}" class="card-img-top rounded-top" alt="${movie.title}" style="height: 350px; width: 100%; object-fit: cover;">
-                    <span class="badge bg-warning position-absolute top-0 end-0 m-2 text-dark fs-6 rounded-pill px-3">
-                        ${movie.year}
-                    </span>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title text-warning fw-bold text-center">${movie.title}</h5>
-                    <p class="card-text text-light small text-center">${movie.genre.toUpperCase()}</p>
-                    <div class="d-flex justify-content-center mt-3">
-                        <span class="fs-5 text-warning text-center"> <i class="fas fa-star text-warning"></i> ${movie.rating} / 10</span>
+                <div class="position-relative overflow-hidden">
+                    <img src="${movie.img}" class="card-img-top" alt="${movie.title}" style="height: 350px; object-fit: cover;">
+                    <div class="rating-badge position-absolute top-0 end-0 m-2 px-2 py-1 bg-warning text-dark fw-bold rounded">
+                        <i class="fas fa-star small"></i> ${movie.rating}
                     </div>
                 </div>
-                <div class="card-footer bg-transparent border-0 p-3 mt-auto">
-                    <button class="btn btn-warning btn-sm w-100 fw-bold text-dark rounded-pill"> <i class="fas fa-play me-1"></i> Watch Now</button>
+                <div class="card-body d-flex flex-column">
+                    <h6 class="card-title text-warning fw-bold mb-1">${movie.title}</h6>
+                    <p class="small text-secondary mb-3">${movie.genre.toUpperCase()} • ${movie.year}</p>
+                    <button class="btn btn-outline-warning btn-sm mt-auto rounded-pill">Watch Now</button>
                 </div>
             </div>
         </div>
-        `
-    ).join('');
+    `).join('');
 }
 
 function showall(){
     displayMovies(movies);
 }
 
-function filterAction(){
-    const actionMovies = movies.filter((movies) =>{
-        return movies.genre === "action";
-    });
-
-    displayMovies(actionMovies);
-}
-function filterLove() {
-    const loveMovies = movies.filter((movies) => {
-        return movies.genre === "love"; 
-    });
-    displayMovies(loveMovies);
-}
-function filterGhost(){
-    const ghostMovies = movies.filter((movies) =>{
-        return movies.genre === "ghost";
-    });
-
-    displayMovies(ghostMovies);
-}
-function filterComedy() {
-    const comedyMovies = movies.filter((movies) => {
-        return movies.genre === "comedy"; 
-    });
-    displayMovies(comedyMovies);
+function filterGenre(category) {
+    const filtered = movies.filter(movie => movie.genre === category);
+    displayMovies(filtered);
 }
 function filteryear(){
     const yearMovies  = movies.filter((movies) =>{
@@ -91,17 +71,15 @@ function filteryear(){
 }
 
 function findTopRated() {
-    const topRated = movies.filter((m) => {
-        const score = parseFloat(m.rating.replace("⭐", "").trim());
-        return score >= 8.0; 
-    });
+    const topRated = movies.filter(movies => parseFloat(m.rating) >= 8.0);
     displayMovies(topRated);
 }
 
-function searchMovie() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const searched = movies.filter(m => m.title.toLowerCase().includes(input));
+
+document.getElementById("searchInput").addEventListener("input", (e) => {
+    const input = e.target.value.toLowerCase();
+    const searched = movies.filter(movies => movies.title.toLowerCase().includes(input));
     displayMovies(searched);
-}
+});
 
 window.onload = showall;

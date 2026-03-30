@@ -1,10 +1,41 @@
-.navbar-brand { 
-    font-size: 1.5rem; 
+body {
+    background-color: #0f0f0f ;
+    color: white;
+}
+.navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(33, 37, 41, 0.9);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.movie-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .movie-card img { 
     height: 400px; 
     object-fit: cover;
  }
+ .movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2);
+}
+.form-control {
+    border-radius: 30px;
+    padding: 10px 20px;
+    border: 2px solid #333;
+    background: #dad5d5;
+    color: rgb(12, 11, 11);
+}
+
+.form-control:focus {
+    background: #f0e9e9;
+    border-color: #ffc107;
+    color: rgb(17, 17, 17);
+    box-shadow: none;
+}
 
  .btn{
     transition: all 0.3s ease;
